@@ -15,7 +15,7 @@ function ProductScreen({ match }) {
     const {product,loading, error } = productDetails;
     useEffect(() => {
         dispatch(listProductDetails(match.params.id))
-      }, [dispatch]);
+      }, [dispatch, match]);
 
   return (
     <div>
