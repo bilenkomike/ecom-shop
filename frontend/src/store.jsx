@@ -25,7 +25,7 @@ const initialState = {
     cart: {
         cartItems: cartItemsFromStorage
     },
-    userlogin: {
+    userLogin: {
         userInfo: userInfoFromStorage
     }
 }
