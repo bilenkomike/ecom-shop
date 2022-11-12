@@ -6,14 +6,48 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import CheckoutSteps from '../components/CheckoutSteps';
 
-function PlaceOrderScreen() {
+import { createOrder } from '../actions/orderActions';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+
+function PlaceOrderScreen({history}) {
+  
+  const orderCreate = useSelector(state => state.orderCreate);
+  const { order, error, success } = orderCreate;
+  
+  const dispatch = useDispatch();
+
+
+
   const cart = useSelector( state => state.cart );
   cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2);
   cart.shippingPrice = (cart.itemsPrice > 100 ? 0 : 10).toFixed(2);
   cart.taxPrice = Number((0.082) * cart.itemsPrice).toFixed(2);
   cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2);
 
-  const placeOrder = () => {};
+  if(!cart.paymentMethod) {
+    history.push('/payment');
+  }
+
+  useEffect(() => {
+    if(success) {
+      dispatch({type: ORDER_CREATE_RESET})
+      history.push(`/order/${order._id}`);
+      
+    }
+  }, [success, history]);
+
+  const placeOrder = () => {
+    dispatch(createOrder({
+      orderItems:cart.cartItems,
+      shippingAddress: cart.shippingAddress,
+      paymentMethod: cart.paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      shippingPrice: cart.shippingPrice,
+      taxPrice: cart.taxPrice,
+      totalPrice: cart.totalPrice
+    }));
+  };
+
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -113,7 +147,14 @@ function PlaceOrderScreen() {
                 <Col>{cart.totalPrice}</Col>
                </Row>
               </ListGroup.Item>
-
+              
+              
+              <ListGroup.Item>
+                {error && <Message variant='danger'>{error}</Message>}
+              </ListGroup.Item>
+              
+              
+              
               <ListGroup.Item>
                <Button 
                type="button"
@@ -131,4 +172,4 @@ function PlaceOrderScreen() {
   )
 }
 
-export default PlaceOrderScreen
+export default PlaceOrderScreen;
