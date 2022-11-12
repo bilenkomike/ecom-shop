@@ -23,6 +23,7 @@ function App() {
             <Route path="/login" component={LoginScreen} />
             <Route path="/register" component={RegisterScreen} />
             <Route path="/profile" component={ProfileScreen} />
+            <Route path="/shipping" component={ShippingScreen} />
           </Container>
         </main>
       <Footer />
