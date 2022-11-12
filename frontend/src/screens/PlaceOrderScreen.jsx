@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card} from 'react-bootstrap';
 import Message from '../components/Message';
-import Loader from '../components/Loader';
+
 import CheckoutSteps from '../components/CheckoutSteps';
 
 import { createOrder } from '../actions/orderActions';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+
 
 function PlaceOrderScreen({history}) {
   
@@ -31,10 +32,10 @@ function PlaceOrderScreen({history}) {
   useEffect(() => {
     if(success) {
       dispatch({type: ORDER_CREATE_RESET})
-      history.push(`/order/${order._id}`);
+      history.push(`/order/${order['_id']}`);
       
     }
-  }, [success, history]);
+  }, [success, history, order,dispatch]);
 
   const placeOrder = () => {
     dispatch(createOrder({
