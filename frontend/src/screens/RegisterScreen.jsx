@@ -8,7 +8,7 @@ import Message from '../components/Message';
 import FormContainer from '../components/FormContainer';
 
 
-function LoginScreen({location, history}) {
+function RegisterScreen({location, history}) {
     const [name, setName] = useState('');
     const [email, setEmail]       = useState('');
     const [password, setPassword] = useState('');
@@ -111,4 +111,4 @@ function LoginScreen({location, history}) {
     )
 }
 
-export default LoginScreen
+export default RegisterScreen;
