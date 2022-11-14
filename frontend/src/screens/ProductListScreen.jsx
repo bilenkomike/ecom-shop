@@ -6,12 +6,12 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { listProducts, deleteProduct, createProduct } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productCostants';
-
+import Paginate from '../components/Paginate'
 function ProductListScreen({history, match}) {
 
     const dispatch = useDispatch();
     const productList = useSelector(state => state.productList)
-    const {loading, error, products} = productList;
+    const {loading, error, products, pages,page} = productList;
 
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin;
@@ -21,7 +21,7 @@ function ProductListScreen({history, match}) {
 
     const productCreate = useSelector(state => state.productCreate)
     const {loading:loadingCreate, error:errorCreate, success: successCreate, product: createdProduct} = productCreate;
-
+    let  keyword = history.location.search;
     useEffect(() => {
         dispatch({type: PRODUCT_CREATE_RESET});
         if(!userInfo.isAdmin) {
@@ -32,10 +32,10 @@ function ProductListScreen({history, match}) {
             history.push(`/admin/product/${createdProduct._id}/edit`);
         }
         else {
-            dispatch(listProducts());
+            dispatch(listProducts(keyword));
         }
         
-    }, [dispatch,history,userInfo,successDelete, successCreate, createdProduct]);
+    }, [dispatch,history,userInfo,successDelete, successCreate, createdProduct,keyword]);
 
     
 
@@ -72,6 +72,7 @@ function ProductListScreen({history, match}) {
         : error ? 
         <Message variant='danger'>{error}</Message> : 
         (
+            <div>
             <Table striped bordered hover responsive className="table-sm">
                 <thead>
                     <tr>
@@ -106,7 +107,8 @@ function ProductListScreen({history, match}) {
                     ))}
                 </tbody>
             </Table>
-
+            <Paginate pages={pages} page={page} isAdmin={true} />
+            </div>
         )
         }
     </div>
